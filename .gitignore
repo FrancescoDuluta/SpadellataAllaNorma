@@ -1,0 +1,47 @@
+# Eseguibili e binari compilati
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# File oggetto e librerie intermedie
+*.o
+*.obj
+*.ko
+*.elf
+*.ilk
+*.map
+*.idb
+*.pdb
+*.lib
+*.a
+*.la
+*.lo
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Cartelle di build comuni (CMake, Make, ecc.)
+build/
+bin/
+obj/
+out/
+Debug/
+Release/
+
+# File di debug macOS
+*.dSYM/
+
+# Configurazioni locali di Visual Studio Code
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/c_cpp_properties.json
+*.code-workspace
+
+# File di sistema operativo
+.DS_Store
+Thumbs.db
