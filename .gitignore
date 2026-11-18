@@ -24,6 +24,11 @@
 *.so.*
 *.dylib
 
+# Documentazione autogenerata da Doxygen
+docs/html/
+docs/latex/
+*.tag
+
 # Cartelle di build comuni (CMake, Make, ecc.)
 build/
 bin/
