@@ -1,0 +1,60 @@
+#---------------------------------------------------------------------------
+
+Configurazione Doxygen snella per progetto C++ (Discesa del Gradiente)
+
+#---------------------------------------------------------------------------
+
+Informazioni di base del progetto
+
+PROJECT_NAME           = "Progetto intermedio 26_27"
+PROJECT_BRIEF          = "Libreria C++ per ottimizzazione numerica tramite discesa del gradiente"
+PROJECT_LOGO           = assets/logo.png
+PROJECT_ICON           = assets/favicon.ico
+OUTPUT_DIRECTORY       = docs
+OUTPUT_LANGUAGE        = Italian
+
+Input e scansione dei file
+
+Nota: verifica che i nomi delle cartelle corrispondano a quelli del vostro repo
+
+INPUT                  = src include . README.md
+FILE_PATTERNS          = *.cpp *.hpp *.h *.md
+RECURSIVE              = YES
+EXCLUDE_PATTERNS       = /build/ /.git/ /tests/
+
+Se avete un README.md nella root, lo usa come homepage della documentazione
+
+USE_MDFILE_AS_MAINPAGE = README.md
+
+Ottimizzazione specifica per C++
+
+OPTIMIZE_OUTPUT_FOR_C  = NO
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+Formattazione e supporto LaTeX / MathJax per le equazioni
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+USE_MATHJAX            = YES
+MATHJAX_FORMAT         = HTML-CSS
+MATHJAX_RELPATH        = https://cdn.jsdelivr.net/npm/mathjax@2
+
+Disabilita l'output LaTeX/PDF locale (evita errori se non avete pdflatex installato)
+
+GENERATE_LATEX         = NO
+
+Diagrammi delle classi e delle dipendenze (richiede Graphviz installato)
+
+HAVE_DOT               = YES
+UML_LOOK               = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+
+Avvisi utili durante lo sviluppo per non dimenticare parametri
+
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
