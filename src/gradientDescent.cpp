@@ -1,4 +1,9 @@
-/**  @author Francesco */
+/**
+ * @file GradientDescent.cpp
+ * @brief Implementaione della classe GradientDescent
+ * @author Francesco
+ * @date 19-11-2026
+*/
 #include "../include/GradientDescent.h"
 #include <iostream>
 
@@ -23,7 +28,6 @@ void print_status(int k, double norm, double funcVal, double error) {
 }
 
 /*
-
 */
 DescentResult GradientDescent::solve(const Function& func, const Point2D& initial_point) const {
     Point2D current_point = initial_point;

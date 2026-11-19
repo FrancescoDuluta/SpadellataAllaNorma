@@ -1,4 +1,9 @@
-/**  @author */
+/**
+ * @file Point2D.cpp
+ * @brief Implementaione della struct Point2D
+ * @author Francesco
+ * @date 19-11-2026
+*/
 #include "../include/Point2D.h"
 #include <cmath>
 
