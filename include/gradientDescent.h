@@ -38,7 +38,7 @@ class GradientDescent {
          * 
          */
         GradientDescent(double step_size, int max_iterations, double tolerance);
-        
+
         /**
          * @brief Modifica la lunghezza del passo costante \f$ a\f$
          * @param a La nuova lunghezza da dare al passo costante.

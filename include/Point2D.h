@@ -28,6 +28,7 @@ struct Point2D {
      * Costruttore vuoto che inizializza i valori a 0.
      */
     Point2D() = default;
+
     /**
      * @brief Costruttore completo.
      * Costruttore completo che inizializza i valori a quelli scelti.
@@ -35,6 +36,13 @@ struct Point2D {
      * @param y_val Valore per la coordinata y.
      */
     Point2D(double x_val, double y_val);
+
+            
+    /**
+     * @brief Costruttore di copia
+     * @param p Riferimento del punto di cui copiare gli attributi
+     */
+    Point2D(const Point2D& p);
 
     /**
      * @brief Operatore di somma.
@@ -62,7 +70,7 @@ struct Point2D {
      * @param other Un secondo Point2D da cui copiare i valori.
      * @return Point2D Il punto costituito dalla copia del secondo punto Point2D.
      */
-    Point2D operator=(const Point2D& other) const;
+    Point2D& operator=(const Point2D& other);
 
     // Norma euclidea ||v||
     /**
