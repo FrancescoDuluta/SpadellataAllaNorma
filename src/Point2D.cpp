@@ -38,6 +38,21 @@ Point2D& Point2D::operator=(const Point2D& other) {
     return *this;
 }
 
+// Operatore di confronto >
+bool Point2D::operator>(const Point2D& other) {
+    return std::abs(this->norm()) > std::abs(other.norm());
+}
+
+// Operatore di confronto <
+bool Point2D::operator<(const Point2D& other) {
+    return std::abs(this->norm()) < std::abs(other.norm());
+}
+
+// Operatore di confronto ==
+bool Point2D::operator==(const Point2D& other) {
+    return std::abs(this->norm()) == std::abs(other.norm());
+}
+
 // Calcolo della norma euclidea: \f$ \sqrt{x^2 + y^2}\f$
 double Point2D::norm() const {
     return std::hypot(x,y);

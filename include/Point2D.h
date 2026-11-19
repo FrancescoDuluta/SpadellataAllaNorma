@@ -72,6 +72,27 @@ struct Point2D {
      */
     Point2D& operator=(const Point2D& other);
 
+    /**
+     * @brief Confronto maggiore tra punti (se this > other) 
+     * @param other Punto Point2D da confrontare se è minore del punto this
+     * @return bool Il risultato dell'operazione di confronto
+     */
+    bool operator>(const Point2D& other);
+
+    /**
+     * @brief Confronto minore tra punti (se this < other) 
+     * @param other Punto Point2D da confrontare se è maggiore del punto this
+     * @return bool Il risultato dell'operazione di confronto
+     */
+    bool operator<(const Point2D& other);
+
+    /**
+     * @brief Confronto == tra punti (se this == other) 
+     * @param other Punto Point2D da confrontare se è uguale al punto this
+     * @return bool Il risultato dell'operazione di confronto
+     */
+    bool operator==(const Point2D& other);
+
     // Norma euclidea ||v||
     /**
      * @brief Norma euclidea $\lVert\lVert v \rVert\rVert$.
