@@ -2,8 +2,8 @@
 
 ![C++](https://img.shields.io/badge/C%2B%2B-17-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 ![Architecture](https://img.shields.io/badge/Architecture-OOP%20%2F%20Polymorphism-blueviolet?style=for-the-badge)
-![Build](https://img.shields.io/badge/Compiler-g%2B%2B%20-Wall%20-Wextra-success?style=for-the-badge)
-![University](https://img.shields.io/badge/Corso-Laboratorio%20di%20Programmazione-orange?style=for-the-badge)
+![Build](https://img.shields.io/badge/University-UNIPD-red?style=for-the-badge)
+![University](https://img.shields.io/badge/Course-Laboratorio%20di%20Programmazione-orange?style=for-the-badge)
 
 Implementazione in C++ dell'algoritmo di **discesa del gradiente (Gradient Descent) a passo costante** per la ricerca del minimo locale di funzioni scalari bidimensionali $f: \mathbb{R}^2 \to \mathbb{R}$, sviluppata come prova intermedia per il corso di *Laboratorio di Programmazione*.
 
@@ -84,6 +84,11 @@ classDiagram
 
 ```text
 SpadellataAllaNorma/
+├── assets/
+│   ├── favicon.ico          # Icona del progetto (per la documentazione html)
+│   ├── logo.png             # Logo del progetto (per la documentazione html) 
+├── docs/
+│   ├── ...                  # File html/js generati da doxygen per la documentazione
 ├── include/
 │   ├── Point2D.h            # Struttura vettoriale 2D e algebra di base
 │   ├── Function.h           # Interfaccia astratta per le funzioni R^2 -> R
@@ -97,7 +102,7 @@ SpadellataAllaNorma/
 │   ├── funzioni_5_8.cpp     # Implementazione f5 - f8 e rispettivi gradienti
 │   └── main.cpp             # Suite automatizzata di test obbligatori ed esplorativi
 ├── README.md                # Documentazione principale repository GitHub
-└── README.txt               # Reportistica attività per consegna Moodle
+├── consegna.pdf             # Consegna del progetto assegnata dal docente
 ```
 
 ---
@@ -146,7 +151,7 @@ g++ -std=c++17 -Wall -Wextra -Iinclude src/*.cpp -o gradient_descent
 | :--- | :--- | :--- |
 | **Francesco** | `Francesco` | Setup repository & CI/Git workflow, progettazione architettura OOP (`Point2D`, `Function`), implementazione motore `GradientDescent`, orchestrazione suite di test in `main.cpp` e validazione finale su VLab. |
 | **Lorenzo** | `Lorenzo` | Calcolo analitico derivate parziali e minimi noti per $f_1 \dots f_4$, implementazione moduli `funzioni_1_4.h/.cpp` e definizione casi di test dedicati. |
-| **Denis** | `Denis` | Calcolo analitico derivate parziali e minimi noti per $f_5 \dots f_8$, implementazione moduli `funzioni_5_8.h/.cpp`, casi di test e redazione reportistica `README.txt`. |
+| **Denis** | `Denis` | Calcolo analitico derivate parziali e minimi noti per $f_5 \dots f_8$, implementazione moduli `funzioni_5_8.h/.cpp`, casi di test e redazione reportistica `README.md`. |
 
 ---
 

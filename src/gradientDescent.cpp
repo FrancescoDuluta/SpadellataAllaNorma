@@ -43,7 +43,7 @@ DescentResult GradientDescent::solve(const Function& func, const Point2D& initia
                 std::cout << "Errore: divergenza trovata nel calcolo del valore della funzione in p_k! " << std::endl;
                 break;
             } 
-        error = funcVal - func.known_minimum();
+        error = funcVal - func.evaluate(func.known_minimum());
         
         // Controllo criterio di arresto 1: ||grad(f(p_k))|| < soglia T
         if(norm < tolerance) converged = true;
