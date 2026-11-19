@@ -1,1 +1,0 @@
-@authors: Francesco, Lorenzo, Denis;

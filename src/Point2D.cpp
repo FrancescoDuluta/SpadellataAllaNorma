@@ -1,3 +1,4 @@
+/**  @author */
 #include "../include/Point2D.h"
 #include <cmath>
 
@@ -17,6 +18,11 @@ Point2D Point2D::operator-(const Point2D& other) const {
 // Moltiplicazione punto * scalare
 Point2D Point2D::operator*(double scalar) const {
     return Point2D(x * scalar, y * scalar);
+}
+
+// Assegnamento 
+Point2D Point2D::operator=(const Point2D& other) const {
+    return Point2D(other.x, other.y);
 }
 
 // Calcolo della norma euclidea: sqrt(x^2 + y^2)[cite: 2]
