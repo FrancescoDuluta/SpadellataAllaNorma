@@ -1,109 +1,100 @@
 /**
  * @file GradientDescent.cpp
- * @brief Implementaione della classe GradientDescent
+ * @brief Implementazione della classe GradientDescent e delle funzioni ausiliarie di stampa.
  * @author Francesco
  * @date 19-11-2026
-*/
+ */
+
 #include "../include/GradientDescent.h"
 #include <iostream>
 #include <cmath>
 
-/*
-    Definizione del costruttore completo di GradientDescent: inizializzare gli attributi 
-    privati (passo a, iterazioni massime N, soglia T) tramite member initializer list
-*/
-
+// Definizione del costruttore parametrico tramite member initializer list
 GradientDescent::GradientDescent(double step_size, int max_iterations, double tolerance) :
-    step_size(step_size), max_iterations(max_iterations), tolerance(tolerance)  {}
+    step_size(step_size), max_iterations(max_iterations), tolerance(tolerance) {}
 
-/* 
-    Definizione del metodo set_step_size necessario per cambiare la dimensione del passo a
-*/
+// Aggiorna la lunghezza del passo costante 'a'
 void GradientDescent::set_step_size(double step_size) {
     this->step_size = step_size;
 }
 
-/*
-    Definizione della funzione che stampa le informazioni (iterazioni, norma, valore calcolato, 
-    errore) del punto corrente in analisi nell'algoritmo 
-*/
-void print_status(int k, double norm, double funcVal, double error) {
-    std::cout << "k: " << k << "\tpunto p_k: " << norm << "\tvalore f(p_k)" << funcVal <<
-                "\terrore e_k: " << error << std::endl;
+// Stampa su terminale lo stato dell'iterazione corrente (k, p_k, f(p_k), e_k, ||grad(f(p_k))||)
+void print_status(int k, const Point2D& current_point, double funcVal, double error, double norm) {
+    std::cout << "k: " << k
+              << "\tpunto p_k: " << current_point
+              << "\tvalore f(p_k): " << funcVal
+              << "\terrore e_k: " << error
+              << "\t||grad||: " << norm << std::endl;
 }
 
-/*
-    Definizione dell'algoritmo protagonista del progetto, che si occupa di calcolare il minimo 
-    di una funzione generica. Esso considera un punto che, partendo da una posizione iniziale
-    \f$(p_0, f(p_0))\f$, percorre la superficie di una funzione matematica utilizzando un certo n
-    umero di iterazioni che spostano il punto in posizioni successive \f$(p_k, f(p_k))\f$, 
-    con spostamenti che dipendono dal gradiente in cui il punto si trova al passo corrente, andando 
-    nella direzione in cui il gradiente decresce. Questo permette al punto di spostarsi idealmente verso 
-    un minimo locale. Lo spostamento verso il passo successivo è descritto dall’equazione: 
-    \f[p_{k+1} = p_k - a\nabla f(p_k))\f]
-    dove \f$ a\f$ è un parametro che identifica il passo, per semplicità considerato costante per tutte le 
-    iterazioni in questo progetto (molti algoritmi più sofisticati si basano su passi non costanti).
-    L’algoritmo ha quindi bisogno di conoscere:
-        ● la funzione da percorrere;
-        ● il gradiente della funzione;
-        ● la posizione di partenza \f$ p_0 = (x_0, y_0)\f$;
-        ● il passo .𝑎
-    A partire da questi dati è possibile applicare la formula vista sopra e ricavare le posizioni successive 
-    \f$ p_k\f$. Poiché il numero di posizioni calcolabili è potenzialmente infinito, è importante stabilire 
-    il criterio di terminazione, cioè un insieme di condizioni che stabiliscono quando terminare le iterazioni; 
-    in questo progetto i criteri sono due:
-        ● è stato raggiunto un numero massimo di iterazioni \f$ N\f$;
-        ● la norma del gradiente è inferiore a una certa soglia: \f$ ||\nabla f(p_k)|| < T\f$
-    dove rappresenta la norma del gradiente \f$ ||\nabla f(p_k)|| \f$, definita come: 
-    \f$ ||\nabla f(p_k)|| = \sqrt{f_x(p_k)^2 + f_y(p_k)^2}\f$
-    
-*/
+// Esegue l'algoritmo iterativo di discesa del gradiente p_{k+1} = p_k - a * grad(f(p_k))
 DescentResult GradientDescent::solve(const Function& func, const Point2D& initial_point) const {
-    // Definisco una variabile che tratta il punto corrente
-    Point2D current_point = Point2D(initial_point.x, initial_point.y);     
-    int k = 0;                                 // Definisco una variabile che conta le iterazioni
-    bool converged = false;                    // Definisco un booleano che indica se converge o diverge
-    Point2D gradient = Point2D();              // Definisco una variabile punto vuoto che conterrà il gradiente
-    double norm = 0.0; double funcVal = 0.0; double error = 0.0;    // Inizializzo a dei valori di base
+    Point2D current_point = initial_point; // Posizione corrente p_k inizializzata a p_0
+    int k = 0;                             // Contatore delle iterazioni eseguite
+    int last_printed = -1;                 // Traccia l'ultima iterazione stampata per evitare duplicati
+    bool converged = false;                // Flag di avvenuta convergenza
+    bool diverged = false;                 // Flag di divergenza numerica (NaN / Inf)
+
+    Point2D gradient;
+    double norm = 0.0;
+    double funcVal = 0.0;
+    double error = 0.0;
+
+    // Valore analitico noto m = f(x_min, y_min) usato per il calcolo dell'errore e_k
+    const double known_min_val = func.evaluate(func.known_minimum());
+
     /*
-        Ciclo infinito controllato tramite break interni: questa struttura evita di duplicare
-        il calcolo del gradiente e della norma prima dell'ingresso nel ciclo e al termine di ogni
-        iterazione. Le condizioni di terminazione (convergenza, limite iterazioni o divergenza numerica)
-        vengono infatti valutate subito dopo aver calcolato i valori al passo k, interrompendo
-        l'esecuzione prima di effettuare l'aggiornamento al punto successivo p_{k+1}.
-    */
-    while(true) {
-        // Calcolo del gradiente nel punto corrente
+     * Ciclo iterativo con controlli di uscita interni: calcola gradiente, norma, valore
+     * della funzione ed errore al passo k, verifica le condizioni di arresto prima di
+     * aggiornare la posizione e stampa lo stato ogni 10 iterazioni.
+     */
+    while (true) {
+        // Calcolo del gradiente e della sua norma euclidea nel punto corrente
         gradient = func.gradient(current_point);
-        // Calcolo della norma del gradiente
         norm = gradient.norm();
-            if(std::isnan(norm) || std::isinf(norm)) {
-                std::cout << "Errore: divergenza trovata nel calcolo della norma! " << std::endl;
-                break;
-            }
-        // Calcolo valore della funzione
+        if (std::isnan(norm) || std::isinf(norm)) {
+            std::cout << "Errore: divergenza numerica rilevata nel calcolo del gradiente!" << std::endl;
+            diverged = true;
+            break;
+        }
+
+        // Calcolo del valore scalare della funzione f(p_k)
         funcVal = func.evaluate(current_point);
-            if(std::isnan(funcVal) || std::isinf(funcVal)) {
-                std::cout << "Errore: divergenza trovata nel calcolo del valore della funzione in p_k! " << std::endl;
-                break;
-            } 
-        // Calcolo dell'errore
-        error = funcVal - func.evaluate(func.known_minimum());
-        
-        // Controllo criterio di arresto 1: ||grad(f(p_k))|| < soglia T
-        if(norm < tolerance) converged = true;
+        if (std::isnan(funcVal) || std::isinf(funcVal)) {
+            std::cout << "Errore: divergenza numerica rilevata nel calcolo della funzione!" << std::endl;
+            diverged = true;
+            break;
+        }
 
-        // Controllo criterio di arresto 2: k ha raggiunto il numero massimo di iterazioni N
-        if(norm < tolerance || k >= max_iterations) break;
+        // Calcolo dell'errore rispetto al minimo analitico noto: e_k = f(p_k) - m
+        error = funcVal - known_min_val;
 
-        /*  
-            Stampa dello stato al punto corrente (ogni 10 iterazioni): 
-            (punto finale p_E, valore f(p_E), iterazioni effettuate k, esito della convergenza)
-        */
-        if(k % 10 == 0) print_status(k, norm, funcVal, error);
+        // Stampa periodica ogni 10 iterazioni (k = 0, 10, 20, ...)
+        if (k % 10 == 0) {
+            print_status(k, current_point, funcVal, error, norm);
+            last_printed = k;
+        }
 
-        current_point = current_point - step_size * gradient * funcVal;    // Aggiornamento al nuovo punto (p_k+1)        
-        k++;    // Incremento k
+        // Criterio di arresto 1: norma del gradiente inferiore alla soglia T
+        if (norm < tolerance) {
+            converged = true;
+            break;
+        }
+
+        // Criterio di arresto 2: raggiunto il numero massimo di iterazioni N
+        if (k >= max_iterations) {
+            break;
+        }
+
+        // Aggiornamento della posizione al passo successivo: p_{k+1} = p_k - a * grad(f(p_k))
+        current_point = current_point - step_size * gradient;
+        k++;
     }
-    return {gradient, funcVal, k, converged};   // Restituisco il valore finale trovato come tipo DescentResult
+
+    // Stampa dell'ultima iterazione se non è già stata stampata (ovvero se k non è multiplo di 10)
+    if (!diverged && k != last_printed) {
+        print_status(k, current_point, funcVal, error, norm);
+    }
+
+    return {current_point, funcVal, k, converged};
 }

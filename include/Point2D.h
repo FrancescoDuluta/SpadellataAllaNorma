@@ -1,9 +1,10 @@
 /**
  * @file Point2D.h
- * @brief Dichiarazione della classe e dei metodi per la gestione di un punto in \mathbb{R}^2.
+ * @brief Dichiarazione della struttura e dei metodi per la gestione di un punto in \f$ \mathbb{R}^2 \f$.
  * @author Francesco
  * @date 2026-11-18
  */
+
 #ifndef POINT2D_H
 #define POINT2D_H
 
@@ -11,110 +12,105 @@
 
 /**
  * @struct Point2D
- * @brief Implementa la gestione di un punto in $\mathbb{R}^2$.
- * 
- * Questa struct gestisce la facilitazione implementativa per poter trattare un punto
- * del piano $x,y$ come unica istanza e non come coordinate separate. Questo ovviamente
- * implica la definizione di alcuni operatori e di un metodo che calcola la norma.
- * Abbiamo scelto una struct per questione di facilità di accesso alle variabili dato che 
- * non contiene nulla di così pericoloso da perdere.
+ * @brief Implementa la gestione di un punto o vettore in \f$ \mathbb{R}^2 \f$.
+ * @details Questa struct consente di trattare una coppia di coordinate \f$ (x, y) \f$
+ *          come un'unica entità anziché come scalari separati, definendo gli operatori
+ *          vettoriali, gli operatori di confronto e il calcolo della norma euclidea.
+ *          Si è scelta una struct per garantire accesso diretto e immediato ai campi,
+ *          trattandosi di coordinate prive di vincoli di incapsulamento.
  */
 struct Point2D {
-    double x = 0.0;     ///< Coordinata orizzontale x.
-    double y = 0.0;     ///< Coordinata verticale y.
+    double x = 0.0; ///< Coordinata orizzontale x.
+    double y = 0.0; ///< Coordinata verticale y.
 
     /**
-     * @brief Costruttore vuoto.
-     * Costruttore vuoto che inizializza i valori a 0.
+     * @brief Costruttore di default che inizializza le coordinate a \f$ (0, 0) \f$.
      */
     Point2D() = default;
 
     /**
-     * @brief Costruttore completo.
-     * Costruttore completo che inizializza i valori a quelli scelti.
-     * @param x_val Valore per la coordinata x.
-     * @param y_val Valore per la coordinata y.
+     * @brief Costruttore parametrico che inizializza le coordinate ai valori forniti.
+     * @param x_val Valore iniziale per la coordinata x.
+     * @param y_val Valore iniziale per la coordinata y.
      */
     Point2D(double x_val, double y_val);
 
-            
     /**
-     * @brief Costruttore di copia
-     * @param p Riferimento del punto di cui copiare gli attributi
+     * @brief Costruttore di copia.
+     * @param p Riferimento costante al punto da cui copiare le coordinate.
      */
     Point2D(const Point2D& p);
 
     /**
-     * @brief Operatore di somma.
-     * @param other Un secondo Point2D su cui fare la somma.
-     * @return Point2D Il punto costituito dalla somma delle coordinate.
+     * @brief Operatore di somma vettoriale.
+     * @param other Secondo punto/vettore da sommare.
+     * @return Point2D Risultato della somma componente per componente.
      */
     Point2D operator+(const Point2D& other) const;
-    
+
     /**
-     * @brief Operatore di sottrazione.
-     * @param other Un secondo Point2D su cui fare la sottrazione.
-     * @return Point2D Il punto costituito dalla differenza tra le coordinate.
+     * @brief Operatore di sottrazione vettoriale.
+     * @param other Secondo punto/vettore da sottrarre.
+     * @return Point2D Risultato della differenza componente per componente.
      */
     Point2D operator-(const Point2D& other) const;
-    
+
     /**
-     * @brief Operatore di prodotto con scalare.
-     * @param scalar Uno scalare con cui moltiplicare le coordinate.
-     * @return Point2D Il punto costituito dal prodotto delle coordinate per lo scalare.
+     * @brief Operatore di prodotto punto per scalare.
+     * @param scalar Valore scalare per cui moltiplicare le coordinate.
+     * @return Point2D Punto/vettore scalato.
      */
     Point2D operator*(double scalar) const;
-    
+
     /**
      * @brief Operatore di assegnamento.
-     * @param other Un secondo Point2D da cui copiare i valori.
-     * @return Point2D Il punto costituito dalla copia del secondo punto Point2D.
+     * @param other Punto da cui copiare i valori.
+     * @return Point2D& Riferimento all'istanza corrente aggiornata.
      */
     Point2D& operator=(const Point2D& other);
 
     /**
-     * @brief Confronto maggiore tra punti (se this > other) 
-     * @param other Punto Point2D da confrontare se è minore del punto this
-     * @return bool Il risultato dell'operazione di confronto
+     * @brief Operatore di confronto maggiore (\p this > \p other).
+     * @param other Punto da confrontare.
+     * @return bool \c true se la condizione è soddisfatta, \c false altrimenti.
      */
-    bool operator>(const Point2D& other);
+    bool operator>(const Point2D& other) const;
 
     /**
-     * @brief Confronto minore tra punti (se this < other) 
-     * @param other Punto Point2D da confrontare se è maggiore del punto this
-     * @return bool Il risultato dell'operazione di confronto
+     * @brief Operatore di confronto minore (\p this < \p other).
+     * @param other Punto da confrontare.
+     * @return bool \c true se la condizione è soddisfatta, \c false altrimenti.
      */
-    bool operator<(const Point2D& other);
+    bool operator<(const Point2D& other) const;
 
     /**
-     * @brief Confronto == tra punti (se this == other) 
-     * @param other Punto Point2D da confrontare se è uguale al punto this
-     * @return bool Il risultato dell'operazione di confronto
+     * @brief Operatore di uguaglianza (\p this == \p other).
+     * @param other Punto da confrontare.
+     * @return bool \c true se le coordinate coincidono, \c false altrimenti.
      */
-    bool operator==(const Point2D& other);
+    bool operator==(const Point2D& other) const;
 
-    // Norma euclidea ||v||
     /**
-     * @brief Norma euclidea $\lVert\lVert v \rVert\rVert$.
-     * @return double La distanza delle coordinate dall'origine mediante il Teorema di Pitagora.
+     * @brief Calcola la norma euclidea \f$ \lVert v \rVert = \sqrt{x^2 + y^2} \f$.
+     * @return double Norma euclidea del punto/vettore.
      */
     double norm() const;
 };
 
 /**
- * @brief Moltiplicazione commutativa: permette di scrivere (a * gradiente).
- * @param scalar Scalare a.
- * @param p Punto Point2D che in questo caso sarà il gradiente.
- * @return Point2D Il prodotto dello scalare per il gradiente.
+ * @brief Moltiplicazione commutativa scalare per punto (\f$ a \cdot \nabla f \f$).
+ * @param scalar Scalare moltiplicativo.
+ * @param p Punto o vettore gradiente.
+ * @return Point2D Prodotto dello scalare per il punto.
  */
 Point2D operator*(double scalar, const Point2D& p);
 
 /**
- * @brief Stampa formattata su terminale: es. (x, y).
- * @param os Il riferimento all'oggetto dell'output stream della classe std.
- * @param p Il punto Point2D di cui voglio stampare le coordinate (x,y).
- * return std::ostream& Il riferimento all'oggetto output stream della classe standard.
+ * @brief Operatore di inserimento su stream per la stampa formattata \f$ (x, y) \f$.
+ * @param os Riferimento allo stream di output.
+ * @param p Punto da stampare.
+ * @return std::ostream& Riferimento allo stream di output aggiornato.
  */
 std::ostream& operator<<(std::ostream& os, const Point2D& p);
 
-#endif // Point2D_H
+#endif // POINT2D_H
