@@ -1,0 +1,35 @@
+name: Build and Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            output_name: gradient_descent-linux-x64
+          - os: windows-latest
+            output_name: gradient_descent-windows-x64.exe
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile C++ executable
+        shell: bash
+        run: g++ -std=c++17 -Wall -Wextra -O2 -Iinclude src/*.cpp -o ${{ matrix.output_name }}
+
+      - name: Attach binaries to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.output_name }}
+          generate_release_notes: true
