@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  build:
     strategy:
       matrix:
         include:
@@ -28,8 +28,25 @@ jobs:
         shell: bash
         run: g++ -std=c++17 -Wall -Wextra -O2 -Iinclude src/*.cpp -o ${{ matrix.output_name }}
 
-      - name: Attach binaries to GitHub Release
+      - name: Upload compiled binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.output_name }}
+          path: ${{ matrix.output_name }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all binaries
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ matrix.output_name }}
+          files: dist/*
           generate_release_notes: true
